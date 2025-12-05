@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lookup Hub V3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<style>
+:root {
+  --primary: #8e2de2;   /* neon purple */
+  --secondary: #4a00e0; /* deep violet */
+  --accent: #00c6ff;    /* neon blue */
+  --card-bg: rgba(0,0,0,0.7);
+  --text: #ffffff;
+  --glow: rgba(0,198,255,0.7);
+}
+body {
+  margin: 0;
+  font-family: 'Montserrat', Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text);
+  text-align: center;
+  background: linear-gradient(270deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+  background-size: 800% 800%;
+  animation: gradientBG 20s ease infinite;
+  padding-top: 50px;
+  overflow-x: hidden;
+}
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 50% 50%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 50%; }
+  100% { background-position: 0% 50%; }
+}
+h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px var(--primary), 0 0 20px var(--accent);
+  opacity: 0;
+  animation: fadeIn 2s forwards;
+}
+.logo {
+  width: 150px;
+  margin-bottom: 20px;
+  animation: fadeIn 2s forwards;
+}
+.tabs {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.tab-button {
+  padding: 12px 24px;
+  font-size: 1em;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(45deg, var(--primary), var(--accent));
+  color: var(--text);
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px var(--primary), 0 0 20px var(--accent);
+}
+.tab-button:hover, .tab-button.active {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--accent), 0 0 40px var(--primary);
+}
+.card {
+  background: var(--card-bg);
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px var(--accent), 0 0 40px var(--primary);
+  backdrop-filter: blur(10px);
+  max-width: 500px;
+  width: 90%;
+  opacity: 0;
+  transform: translateY(60px) rotateX(15deg);
+  animation: slideUp 1.5s forwards;
+  animation-delay: 0.5s;
+  margin-bottom: 20px;
+}
+.card h2 { margin-top:0; margin-bottom: 20px; font-size: 2rem; text-shadow: 0 0 10px var(--primary); }
+input[type="text"], input[type="password"] {
+  width: calc(100% - 24px);
+  padding: 12px;
+  font-size: 1.1em;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  margin-bottom: 15px;
+  background-color: rgba(0,0,0,0.5);
+  color: var(--text);
+}
+button.lookup-btn {
+  padding: 12px 25px;
+  font-size: 1.1em;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: linear-gradient(45deg, var(--accent), var(--primary));
+  color: var(--text);
+  box-shadow: 0 0 15px var(--primary), 0 0 25px var(--accent);
+  transition: all 0.3s ease;
+}
+button.lookup-btn:hover {
+  transform: scale(1.1) rotate(-2deg);
+  box-shadow: 0 0 30px var(--accent), 0 0 50px var(--primary);
+}
+.result {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 12px;
+  font-size: 1.1em;
+  text-align: left;
+  min-height: 50px;
+  word-break: break-word;
+  white-space: pre-wrap;
+  opacity: 0;
+  box-shadow: 0 0 15px var(--accent), 0 0 25px var(--primary);
+}
+footer {
+  margin-top: 20px;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9em;
+  opacity: 0;
+  animation: fadeIn 2s forwards;
+  animation-delay: 2.5s;
+  text-shadow: 0 0 5px var(--primary);
+}
+@keyframes fadeIn { to {opacity: 1;} }
+@keyframes slideUp { to { transform: translateY(0) rotateX(0deg); opacity: 1; } }
+@media(max-width:500px){
+  h1{ font-size:2rem; }
+  .card{ padding:20px; }
+  .card h2{ font-size:1.5rem; }
+  .logo { width:120px; }
+}
+</style>
+</head>
+<body>
+
+<img src="LMFAO.png" alt="Lookup Hub Logo" class="logo">
+
+<h1>Lookup Hub V3</h1>
+
+<div class="tabs">
+  <button class="tab-button active" onclick="showTab('ip')">IP Lookup</button>
+  <button class="tab-button" onclick="showTab('dns')">DNS Lookup</button>
+  <button class="tab-button" onclick="showTab('email')">Email Validator</button>
+  <button class="tab-button" onclick="showTab('discord')">Discord ID Lookup</button>
+</div>
+
+<div id="ip" class="card tab-content">
+  <h2>IP Lookup</h2>
+  <input type="text" id="ip-input" placeholder="Enter IP or leave blank">
+  <button class="lookup-btn" onclick="lookupIP()">Lookup 🔍</button>
+  <div class="result" id="ip-result">Your IP info will appear here!</div>
+</div>
+
+<div id="dns" class="card tab-content" style="display:none;">
+  <h2>DNS Lookup</h2>
+  <input type="text" id="dns-input" placeholder="Enter domain (example.com)">
+  <button class="lookup-btn" onclick="lookupDNS()">Lookup 🔍</button>
+  <div class="result" id="dns-result">DNS records will appear here!</div>
+</div>
+
+<div id="email" class="card tab-content" style="display:none;">
+  <h2>Email Validator</h2>
+  <input type="text" id="email-input" placeholder="Enter email (example@domain.com)">
+  <button class="lookup-btn" onclick="validateEmail()">Validate 🔍</button>
+  <div class="result" id="email-result">Validation result will appear here!</div>
+</div>
+
+<div id="discord" class="card tab-content" style="display:none;">
+  <h2>Discord ID Lookup</h2>
+  <input type="password" id="discord-token" placeholder="Enter your Discord token">
+  <input type="text" id="discord-input" placeholder="Enter Discord ID">
+  <button class="lookup-btn" onclick="lookupDiscord()">Lookup 🔍</button>
+  <div class="result" id="discord-result">Discord info will appear here!</div>
+</div>
+
+<footer>made by TG ACE</footer>
+
+<script>
+function showTab(tab){
+  document.querySelectorAll('.tab-content').forEach(c=>c.style.display='none');
+  document.getElementById(tab).style.display='block';
+  document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.tab-button[onclick="showTab('${tab}')"]`).classList.add('active');
+}
+function typeText(element, text, speed=30){
+  element.innerHTML='';
+  element.style.opacity=1;
+  let i=0;
+  const interval=setInterval(()=>{
+    element.innerHTML+=text[i];
+    i++;
+    if(i>=text.length) clearInterval(interval);
+  }, speed);
+}
+function lookupIP(){
+  const ip=document.getElementById('ip-input').value.trim()||'';
+  const url= ip ? `https://ipinfo.io/${ip}/json` : 'https://ipinfo.io/json';
+  const resultDiv=document.getElementById('ip-result');
+  resultDiv.innerHTML='Searching...';
+  resultDiv.style.opacity=1;
+  fetch(url).then(r=>r.json()).then(data=>{
+    if(data.error || !data.ip) throw new Error(data.error || 'Invalid IP');
+    const text=`IP: ${data.ip || 'N/A'}
+City: ${data.city || 'N/A'}
+Region: ${data.region || 'N/A'}
+Country: ${data.country || 'N/A'}
+Location: ${data.loc || 'N/A'}
+Postal: ${data.postal || 'N/A'}
+Timezone: ${data.timezone || 'N/A'}
+ASN/Org: ${data.org || 'N/A'}`;
+    typeText(resultDiv,text,30);
+  }).catch(e=>{ typeText(resultDiv,`Error: ${e.message}`,30); });
+}
+function lookupDNS(){
+  const domain=document.getElementById('dns-input').value.trim();
+  const resultDiv=document.getElementById('dns-result');
+  if(!domain){ typeText(resultDiv,'Please enter a domain!',30); return; }
+  resultDiv.innerHTML='Fetching DNS records...';
+  fetch(`https://dns.google/resolve?name=${domain}`).then(r=>r.json()).then(data=>{
+    if(data.Status!==0){ typeText(resultDiv,'No DNS records found.',30); return; }
+    let text='DNS Records:\n';
+    if(data.Answer){ data.Answer.forEach(a=>{ text+=`${a.name} ${a.type} ${a.data}\n`; }); }
+    else{ text+='No Answer records.'; }
+    typeText(resultDiv,text,20);
+  }).catch(e=>{ typeText(resultDiv,'Error fetching DNS records: '+e.message,20); });
+}
+function validateEmail(){
+  const email=document.getElementById('email-input').value.trim();
+  const resultDiv=document.getElementById('email-result');
+  if(!email){ typeText(resultDiv,'Please enter an email!',30); return; }
+  const regex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!regex.test(email)){ typeText(resultDiv,'Invalid email format!',30); return; }
+  const domain=email.split('@')[1];
+  resultDiv.innerHTML='Checking MX records...';
+  fetch(`https://dns.google/resolve?name=${domain}&type=MX`).then(r=>r.json()).then(data=>{
+    let text=`Email: ${email}\nFormat: Valid\n`;
+    if(data.Answer && data.Answer.length>0){ text+='MX Records found:\n'; data.Answer.forEach(a=>{ text+=`- ${a.data}\n`; }); }
+    else{ text+='No MX records found for domain.'; }
+    typeText(resultDiv,text,20);
+  }).catch(e=>{ typeText(resultDiv,'Error validating email: '+e.message,20); });
+}
+function lookupDiscord(){
+  const token=document.getElementById('discord-token').value.trim();
+  const id=document.getElementById('discord-input').value.trim();
+  const resultDiv=document.getElementById('discord-result');
+  if(!token || !id){ typeText(resultDiv,'Please enter both token and Discord ID!',30); return; }
+  resultDiv.innerHTML='Fetching Discord info...';
+  fetch(`https://discord.com/api/v9/users/${id}`, { method:'GET', headers:{'Authorization': token} })
+  .then(r=>r.json())
+  .then(data=>{
+    if(data.username){
+      let text = `Username: ${data.username}#${data.discriminator}\n`;
+      text += `ID: ${data.id}\n`;
+      text += `Avatar: https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png\n`;
+      if(data.global_name) text += `Display Name: ${data.global_name}\n`;
+      typeText(resultDiv,text,20);
+    } else { typeText(resultDiv,'User not found or token invalid.',20); }
+  }).catch(e=>typeText(resultDiv,'Error: '+e.message,20));
+}
+</script>
+
+</body>
+</html>
